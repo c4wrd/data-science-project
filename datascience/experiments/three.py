@@ -2,6 +2,8 @@ from datascience.interfaces import Experiment
 
 """
 Can we classify the genre(s) of a movie based on the keywords of the movie?
+
+What keywords are best associated with movies that do well?
 """
 
 class ExperimentThree(Experiment):

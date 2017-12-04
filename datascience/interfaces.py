@@ -1,5 +1,6 @@
 import pymysql
 from configparser import ConfigParser
+from matplotlib.pyplot import show
 
 class Experiment:
     """
@@ -32,3 +33,9 @@ class Experiment:
         with self.get_connection() as connection:
             connection.execute(query, args)
             return connection.fetchone()
+
+    def show(self):
+        """
+        Shows any pending matplotlib plots on the screen
+        """
+        show()

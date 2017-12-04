@@ -22,8 +22,7 @@ GROUP BY debutYear
 
 class ExperimentOne(Experiment):
 
-    #genres = ["sci-fi", "romance", "western", "horror", "animation", "war"]
-    genres = ["sci-fi", "horror", "war"]
+    genres = ["sci-fi", "romance", "western", "horror", "animation", "war"]
 
     def popularity_over_time(self, genre):
         items = self.query(SQL_QUERY_GENRE_TOTAL_MOVIES, (genre,))
@@ -35,6 +34,7 @@ class ExperimentOne(Experiment):
     def run(self):
         df = pd.DataFrame()
         for genre in self.genres:
+            print("Querying popularity of '%s'" % genre)
             ratings = self.popularity_over_time(genre)
             series = pd.Series(ratings, name=genre)
             series = series.ewm(span=5).mean() # moving average smoothing
@@ -42,3 +42,4 @@ class ExperimentOne(Experiment):
 
         # show the plot
         plot = df.plot(title="Genre Popularity over Time")
+        self.show()
