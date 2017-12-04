@@ -2,3 +2,4 @@
 sandbox.ipynb
 .ipynb_checkpoints
 config.ini
+__pycache__

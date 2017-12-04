@@ -16,7 +16,7 @@ class Experiment:
         connection_info = self.config['Database']
         connection = pymysql.connect(
             host=connection_info['host'],
-            user=connection_info['user'],
+            user=connection_info['username'],
             password=connection_info['password'],
             db='imdb',
             cursorclass=pymysql.cursors.DictCursor
