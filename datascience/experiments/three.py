@@ -54,20 +54,26 @@ class ExperimentThree(Experiment):
         return return_probabilities
 
     def plot_genre_keywords(self, top_10_count):
+        """
+        Plots the top 10 keywords of all of the genres
+        into a single plot with (NROWSxNCOLS) dimensions
+        """
         row = 0
         col = 0
         for genre in self.keyword_totals.keys():
-            action = top_10_count[genre]
-            df = pd.DataFrame(action, columns=["keyword", "count"])
+            genre_counts = top_10_count[genre]
+            # create a dataframe with the genre-specific counts
+            df = pd.DataFrame(genre_counts, columns=["keyword", "count"])
+            # invert the dataframe to display the keywords on the y-axis
             df = df[::-1]
             ax = df.plot(yticks=df.index, kind="barh", ax=self.axis[row][col], title=genre, legend=False)
-            ax.set_yticklabels(df.keyword)
-            if col == self.NCOLS - 1:
+            ax.set_yticklabels(df.keyword) # set the y-axis labels to the respective keyword the bar represents
+            if col == self.NCOLS - 1: # if we are in the last column, move to the next row in the plot
                 col = 0
                 row = row + 1
-            else:
+            else: # increment the column number in the plot
                 col = col + 1
-        plt.tight_layout()
+        plt.tight_layout()  # creates a better layout for the plot
         plt.show()
 
     def run(self):
@@ -75,6 +81,7 @@ class ExperimentThree(Experiment):
         results = self.query(SQL_QUERY_KEYWORDS_GENRE)
 
         print("Plotting data...")
+        # compute a map containing the genre-specific keyword counts for each genre
         self.keyword_totals = {}
         for row in results:
             genre = row['genre']
@@ -84,8 +91,11 @@ class ExperimentThree(Experiment):
                 self.keyword_totals[genre] = {}
             self.keyword_totals[genre][keyword] = count
 
+        # create a list of the top 10 keywords and their counts
+        # for each genre
         top_10_list = {}
         for genre in self.keyword_totals.keys():
             top_10_list[genre] = self.top_10(genre)
 
+        # plot the genre and keyword combinations
         self.plot_genre_keywords(top_10_list)
