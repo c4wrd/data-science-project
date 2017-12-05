@@ -5,7 +5,7 @@ from sklearn.preprocessing import normalize as norm
 from sklearn.cluster import DBSCAN as DB
 
 """
-Is there a correlation between the lifespan in years for a TV show, and the average rating of the TV show?
+Is there a way to distinguishably cluster movies between those tht grossed more than their budget and those that did not?
 """
 
 SQL_QUERY_SUCCESSES = """

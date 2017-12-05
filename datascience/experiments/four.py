@@ -74,7 +74,7 @@ class ExperimentFour(Experiment):
         xvals,yvals,rev = [],[],[]
         for item in result:
             xvals.append(float(item['imdb']))
-            yvals.append(int(item['meta']/10))
+            yvals.append(int(item['meta']/10))      # scaling metascore to 1-10 like imdb
             rev.append(float(item['revenue']))
         return [xvals,yvals,rev]
 
