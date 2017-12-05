@@ -25,17 +25,17 @@ GROUP BY genre, keyword
 class ExperimentThree(Experiment):
 
     NROWS = 6
-    NCOLS = 5
+    NCOLS = 4
 
     def __init__(self, config: ConfigParser):
         super().__init__(config)
-        self.figure, self.axis = plt.subplots(nrows=self.NROWS, ncols=self.NCOLS, figsize=(20,16))
+        self.figure, self.axis = plt.subplots(nrows=self.NROWS, ncols=self.NCOLS, figsize=(16,20))
         self.figure.canvas.set_window_title("Keyword Occurences in Genres")
 
     def top_10(self, genre):
         keywords = self.keyword_totals[genre]
         sorted_top = sorted(keywords.items(), key=lambda item: item[1], reverse=True)
-        return sorted_top[:10]
+        return sorted_top[:7]
 
     def get_class_probabilities(self, keyword):
         totals = []
@@ -60,7 +60,7 @@ class ExperimentThree(Experiment):
         """
         row = 0
         col = 0
-        for genre in self.keyword_totals.keys():
+        for genre in top_10_count.keys():
             genre_counts = top_10_count[genre]
             # create a dataframe with the genre-specific counts
             df = pd.DataFrame(genre_counts, columns=["keyword", "count"])
@@ -76,10 +76,32 @@ class ExperimentThree(Experiment):
         plt.tight_layout()  # creates a better layout for the plot
         plt.show()
 
+    def predict(self, keyword):
+        probabilities = self.get_class_probabilities(keyword)
+        return max(probabilities.items(), key=lambda k: k[1])[0]
+
+    def classification_report(self):
+
+        x_train = []
+        y_true = []
+        y_pred = []
+
+        for genre in self.keyword_totals.keys():
+            for keyword in self.keyword_totals[genre]:
+                count = self.keyword_totals[genre][keyword]
+                expected_class = genre
+                predicted_class = self.predict(keyword)
+                for i in range(count):
+                    x_train.append(keyword)
+                    y_true.append(expected_class)
+                    y_pred.append(predicted_class)
+
+        from sklearn.metrics import classification_report
+        print(classification_report(y_true, y_pred))
+
     def run(self):
         print("Querying data...")
         results = self.query(SQL_QUERY_KEYWORDS_GENRE)
-
         print("Plotting data...")
         # compute a map containing the genre-specific keyword counts for each genre
         self.keyword_totals = {}
@@ -91,11 +113,15 @@ class ExperimentThree(Experiment):
                 self.keyword_totals[genre] = {}
             self.keyword_totals[genre][keyword] = count
 
+        self.classification_report()
+
         # create a list of the top 10 keywords and their counts
         # for each genre
         top_10_list = {}
         for genre in self.keyword_totals.keys():
-            top_10_list[genre] = self.top_10(genre)
+            top10 = self.top_10(genre)
+            if top10[0][1] != 1:
+                top_10_list[genre] = top10
 
         # plot the genre and keyword combinations
         self.plot_genre_keywords(top_10_list)

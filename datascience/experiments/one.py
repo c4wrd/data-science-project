@@ -7,7 +7,7 @@ How has the popularity and revenue of specific genres changed over time?
 
 SQL_QUERY_GENRE_TOTAL_MOVIES = """
 SELECT 
-    Count(*) as count, debutYear AS year
+    AVG(averageRating) as rating, debutYear AS year
 FROM
     Title
         JOIN
@@ -35,7 +35,7 @@ class ExperimentOne(Experiment):
         # with
         results = {}
         for item in items:
-            results[item['year']] = item['count']
+            results[item['year']] = item['rating']
         return results
 
     def run(self):
@@ -45,7 +45,7 @@ class ExperimentOne(Experiment):
             print("Querying popularity of '%s'" % genre)
             ratings = self.popularity_over_time(genre)
             series = pd.Series(ratings, name=genre)
-            series = series.ewm(span=5).mean() # smooth the moving average over time
+            series = series.ewm(alpha=0.5).mean() # smooth the moving average over time
             df[genre] = series
 
         # show the plot
