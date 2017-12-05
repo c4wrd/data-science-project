@@ -1,0 +1,63 @@
+        # FEATURE SELECTION  (Ends up selecting casrFacebookLikes and numberFacebookLikes)
+        # feat = fs.SelectKBest(fs.chi2,k=2)
+        # new_flops = feat.fit_transform(flops[1], [1 for x in flops[1]])
+        # print(feat.get_support())
+        # nf = [[x[0] for x in new_flops],[y[1] for y in new_flops]]
+        # fig1 = plot.figure(1)
+        # plot.scatter(nf[0],nf[1], color='r')
+        #
+        # new_suc = feat.fit_transform(successes[1], [0 for x in successes[1]])
+        # ns = [[x[0] for x in new_suc], [y[1] for y in new_suc]]
+        # fig2 = plot.figure(2)
+        # plot.scatter(ns[0], ns[1], color='b')
+
+        # COMBINED DATA PCA AND SELECTKFEAT
+        # c_data = flops[1] + successes[1]
+        # class_labels = [1 for x in flops[1]] + [0 for x in successes[1]]
+
+        # PCA
+        # pca = dec.PCA(n_components=2)
+        # new_c = pca.fit_transform(c_data)
+        # print(pca.explained_variance_ratio_)
+        # ns = [[x[0] for x in new_c],[y[1] for y in new_c]]
+        # fig1 = plot.figure(1)
+        # plot.scatter(ns[0],ns[1],color='b')
+
+        #SELECT K FEAT  (Ends up using number of facebook likes and number of user votes)
+        # feat = fs.SelectKBest(fs.chi2,k=2)
+        # new_c = feat.fit_transform(c_data, class_labels)
+        # print(feat.get_support())
+        # nf = [[x[0] for x in new_c],[y[1] for y in new_c]]
+        # print(len(successes[1]))
+        # print(len(flops[1]))
+        # plot.scatter(nf[0][:1792],nf[1][:1792], color='r', s=1)
+        # plot.scatter(nf[0][1792:],nf[1][1792:], color='b', s=1)
+
+        # feat.fit(flops[1], [0 for x in flops[1]])
+        # new_suc = feat.transform(successes[1])
+        # ns = [[x[0] for x in new_suc], [y[1] for y in new_suc]]
+        # plot.scatter(ns[0], ns[1], color='b')
+
+        # mlp = MLPClassifier(8,activation='logistic',
+        #                     solver='sgd',
+        #                     alpha=.0001,
+        #                     batch_size=200,
+        #                     learning_rate='adaptive',
+        #                     learning_rate_init=.01,
+        #                     power_t=.5,
+        #                     max_iter=500,
+        #                     shuffle=False,
+        #                     random_state=None,
+        #                     tol=.000001,
+        #                     verbose=True,
+        #                     warm_start=False,
+        #                     momentum=.8,
+        #                     nesterovs_momentum=True,
+        #                     early_stopping=False,
+        #                     validation_fraction=0,
+        #                     beta_1=.9,
+        #                     beta_2=.999,
+        #                     epsilon=.0000008)
+        #
+        # mlp.fit(c_data,class_labels)
+        # print(mlp.score(c_data,class_labels))
